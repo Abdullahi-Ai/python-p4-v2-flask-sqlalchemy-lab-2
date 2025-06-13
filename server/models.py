@@ -11,16 +11,15 @@ metadata = MetaData(naming_convention={
 db = SQLAlchemy(metadata=metadata)
 
 
-class Customer(db.Model):
+class Customer(db.Model, SerializerMixin):
     __tablename__ = 'customers'
-    serialize_rules=("_reviews.customer",)
+    serialize_rules = ("-reviews.customer",)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    #Applying the relationships
-    reviews=db.relationship("Review", back_populates="customer")
-    items=association_proxy('reviews', 'item')
+    reviews = db.relationship("Review", back_populates="customer")
+    items = association_proxy('reviews', 'item')
 
     def __repr__(self):
         return f'<Customer {self.id}, {self.name}>'
